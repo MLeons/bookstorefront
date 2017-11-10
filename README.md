@@ -1,2 +1,2 @@
 # react-hello-world
-My Hello World app for simple react tutorials
+Bookstore front end React CRUD
