@@ -1,14 +1,16 @@
 import React from "react";
 import { browserHistory } from "react-router";
 
-const urlForBooks = "http://localhost:3000/api/books/";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as bookActions from '../actions/bookActions'
 
-export class BookAdd extends React.Component {
+
+class BookAdd extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            requestFailed: false,
             book: {
                 title: '',
                 genre: '',
@@ -37,20 +39,7 @@ export class BookAdd extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state.book);
-
-        return fetch(urlForBooks, {
-            method: 'POST',
-            mode: 'CORS',
-            body: JSON.stringify(this.state.book),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
-            browserHistory.push({
-                pathname: "/"
-            });
-        }).catch(err => console.log(err.message, err.name));
+        this.props.actions.addBook(this.state.book);
     }
 
     render() {
@@ -113,3 +102,15 @@ export class BookAdd extends React.Component {
         );
     }
 }
+
+function mapStateToProps(state, ownProps) {
+    return {
+        book: state.bookReducer
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return { actions: bindActionCreators(bookActions, dispatch) }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BookAdd);

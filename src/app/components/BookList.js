@@ -1,90 +1,32 @@
 import React from "react";
 import { Link, browserHistory } from "react-router";
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as bookActions from '../actions/bookActions'
 
-const urlForBooks = "http://localhost:3000/api/books";
 
-export class BookList extends React.Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            requestFailed: false,
-            age: props.age,
-            newLink: props.intialLinkName,
-            bookId: 0
-        }
-
-    }
+class BookList extends React.Component {
 
     onNavigateDetails(bookId) {
         browserHistory.push({
             pathname: "/details/" + bookId
         });
-        // browserHistory.push({
-        //     pathname: '/details/',
-        //     search: { bookid: bookId }
-        // });
     }
 
-    onMakeOlder() {
-        this.setState({
-            age: this.state.age + 3
-        });
-    }
-
-    onChangeName() {
-        this.props.changeLink(this.state.newLink);
-    }
-
-    onHandleChange(event) {
-        this.setState({
-            newLink: event.target.value
-        });
-    }
-
-    componentDidMount() {
-
-        fetch(urlForBooks).then(response => {
-            if (!response.ok) {
-                throw Error("Network request failed")
-            }
-            return response
-        }).then(response => response.json())
-            .then(responseJson => {
-                this.setState({
-                    bookListData: responseJson
-                })
-            }, () => {
-                this.setState({
-                    requestFailed: true
-                })
-            })
+    componentWillMount() {
+        this.props.actions.getBookList();
     }
 
     render() {
 
-        if (this.state.requestFailed) return <p>Failed......</p>
-
-        if (!this.state.bookListData) return <p>Loading...</p>
+        if (!Array.isArray(this.props.book.books)) return <p>Loading...</p>
 
         return (
             <div>
                 <h4>Book List</h4>
-
-                {/* <h4>{this.state.age} --- {this.props.name}</h4>
-                <br />
-                <button className="btn btn-primary" onClick={this.props.greet}>Greet</button>
-                <br />
-                <button className="btn btn-primary" onClick={() => this.onMakeOlder()}>Make older</button>
-                <br />
-                <input type="text" value={this.state.newLink}
-                    onChange={(event) => this.onHandleChange(event)} />
-                <button className="btn btn-primary" onClick={() => this.onChangeName()}>Change link name</button>
-                <hr /> */}
-
                 <ul className="list-unstyled">
-                    {this.state.bookListData.map((book, i) =>
+                    {this.props.book.books.map((book, i) =>
                         <li key={i}>
                             <div className="col-xs-6">
                                 <div className="col-xs-5">
@@ -103,6 +45,19 @@ export class BookList extends React.Component {
             </div >
         )
     }
-
 }
+
+function mapStateToProps(state) {
+    return {
+        book: state.bookReducer
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return { actions: bindActionCreators(bookActions, dispatch) }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BookList);
+
+
 

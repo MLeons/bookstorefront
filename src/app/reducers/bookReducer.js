@@ -1,24 +1,55 @@
+import { browserHistory } from "react-router";
+
 const bookReducer = (state = {
-    listParams: {
-        ticker: '',
-        threshold: 0.0,
-        chartData: ''
-    }
+    books: []
 }, action) => {
 
     switch (action.type) {
-        case "SET_LIST_FULFILLED":
+
+        case "BOOK_LIST":
             state = {
                 ...state,
-                listParams: action.payload
+                books: action.payload
             };
             break;
-        case "SET_LIST":
+
+        case "BOOK_DETAILS":
             state = {
                 ...state,
-                listParams: action.payload
+                books: action.payload
             };
             break;
+
+        case "BOOK_ADD":
+            browserHistory.push({
+                pathname: "/"
+            });
+            state = {
+                ...state,
+                books: action.payload
+            };
+            break;
+
+        case "BOOK_EDIT":
+            browserHistory.push({
+                pathname: "/"
+            });
+            state = {
+                ...state,
+                books: action.payload
+            };
+            break;
+
+        case "BOOK_DELETE":
+            browserHistory.push({
+                pathname: "/"
+            });
+            state = {
+                ...state,
+                books: action.payload
+            };
+            break;
+
     }
     return state;
 };

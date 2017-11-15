@@ -3,11 +3,11 @@ import logger from "redux-logger";
 import promise from "redux-promise-middleware";
 import thunk from "redux-thunk";
 
-import book from "./reducers/bookReducer";
+import bookReducer from "./reducers/bookReducer";
 
 export default createStore(
     combineReducers({
-        book
+        bookReducer
     }),
     {},
     applyMiddleware(logger(), thunk, promise())

@@ -1,48 +1,22 @@
 import React from "react";
 import { Link, browserHistory } from "react-router";
 
-const urlForBooks = "http://localhost:3000/api/books/";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as bookActions from '../actions/bookActions'
 
-export class BookDetails extends React.Component {
+class BookDetails extends React.Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            requestFailed: false,
-        }
-    }
-
-    componentDidMount() {
-
-        let bookDetailsUrl = urlForBooks + this.props.params.bookid;
-
-        fetch(bookDetailsUrl).then(response => {
-            if (!response.ok) {
-                throw Error("Network request failed")
-            }
-            return response
-        }).then(response => response.json())
-            .then(responseJson => {
-                this.setState({
-                    bookItemData: responseJson
-                })
-            }, () => {
-                this.setState({
-                    requestFailed: true
-                })
-            })
+    componentWillMount() {
+        const bookid = this.props.params.bookid;
+        this.props.actions.getBookDetails(bookid);
     }
 
     render() {
 
-        if (this.state.requestFailed) return <p>Failed!</p>
-
-        if (!this.state.bookItemData) return <p>Loading...</p>
-
-        let book = this.state.bookItemData;
+        const book = this.props.book.books;
 
         return (
-
             <div>
                 <div className="panel panel-default">
                     <div className="panel-heading">
@@ -66,12 +40,22 @@ export class BookDetails extends React.Component {
                         </div>
                     </div>
                 </div >
-
                 <div className="pull-right">
                     <Link to={"/edit/" + book._id}>Edit</Link> | <Link to={"/delete/" + book._id}>Delete</Link>
                 </div>
             </div >
-
         );
     }
 }
+
+function mapStateToProps(state, ownProps) {
+    return {
+        book: state.bookReducer
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return { actions: bindActionCreators(bookActions, dispatch) }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BookDetails);

@@ -1,57 +1,35 @@
 import React from "react";
 import { browserHistory } from "react-router";
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as bookActions from '../actions/bookActions'
 
-import { BookList } from "./BookList";
+import BookList from "./BookList";
 
-export class Home extends React.Component {
-
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            homeLink: "Home",
-            initialAge: 27,
-            lastName: "Jones"
-        }
-
-    }
-
-    greet() {
-        alert("Hello there...");
-    }
-
-    onChangePropName() {
-        this.setState({
-            lastName: "Smith"
-        });
-    }
-
-
-    onChangeLinkName(newName) {
-        this.setState({
-            homeLink: newName
-        });
-    }
+class Home extends React.Component {
 
     render() {
-
-
         return (
             <div className="container">
-
-                {/* <hr />
-                <b>{'==> ' + this.state.homeLink}</b>
-                <br />
-                <button className="btn btn-primary" onClick={() => this.onChangePropName()}>Change last name</button> */}
-
-                <BookList age={this.state.initialAge}
-                    name={this.state.lastName}
-                    greet={this.greet}
-                    changeLink={this.onChangeLinkName.bind(this)}
-                    intialLinkName={this.state.homeLink} />
+                <BookList />
             </div>
         );
     }
 }
+
+function mapStateToProps(state, ownProps) {
+    return {
+        book: state.bookReducer
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return { actions: bindActionCreators(bookActions, dispatch) }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
+
+
+
 

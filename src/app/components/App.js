@@ -1,14 +1,9 @@
 import React from "react";
-import { connect } from "react-redux";
 
 import { Header } from "./Header";
-import { setList } from "../actions/bookActions";
-
 
 class App extends React.Component {
-
     render() {
-
         return (
             <div className="container">
                 <div>
@@ -22,18 +17,5 @@ class App extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        ticker: state.ticker
-    };
-};
+export default App;
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        setList: (listParams) => {
-            dispatch(setList(listParams));
-        }
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);

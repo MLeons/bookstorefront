@@ -1,51 +1,19 @@
 import React from "react";
 import { browserHistory } from "react-router";
 
-const urlForBooks = "http://localhost:3000/api/books/";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as bookActions from '../actions/bookActions'
 
-export class BookDelete extends React.Component {
+class BookDelete extends React.Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            requestFailed: false,
-            book: {
-                title: '',
-                genre: '',
-                author: '',
-                publisher: '',
-                pages: '',
-                description: '',
-                image_url: '',
-                buy_url: ''
-            }
-        }
-    }
-
-    componentDidMount() {
-
-        let bookDetailsUrl = urlForBooks + this.props.params.bookid;
-
+    componentWillMount() {
         if (confirm('Are you sure?') == true) {
-            fetch(bookDetailsUrl, {
-                method: 'DELETE',
-                mode: 'CORS',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(res => {
-                browserHistory.push({
-                    pathname: "/"
-                });
-            }).catch(err => console.log(err.message, err.name));
-
+            const bookid = this.props.params.bookid;
+            this.props.actions.deleteBook(bookid);
         } else {
-            browserHistory.push({
-                pathname: "/"
-            });
+            browserHistory.goBack();
         }
-
-
     }
 
     render() {
@@ -55,3 +23,15 @@ export class BookDelete extends React.Component {
         );
     }
 }
+
+function mapStateToProps(state, ownProps) {
+    return {
+        book: state.bookReducer
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return { actions: bindActionCreators(bookActions, dispatch) }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BookDelete);

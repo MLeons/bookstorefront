@@ -1,14 +1,15 @@
 import React from "react";
 import { browserHistory } from "react-router";
 
-const urlForBooks = "http://localhost:3000/api/books/";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as bookActions from '../actions/bookActions'
 
-export class BookEdit extends React.Component {
+class BookEdit extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            requestFailed: false,
             book: {
                 title: '',
                 genre: '',
@@ -24,26 +25,13 @@ export class BookEdit extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount() {
+    componentWillMount() {
+        const bookid = this.props.params.bookid;
+        this.props.actions.getBookDetails(bookid);
+        this.setState({
+            book: this.props.book.books
+        })
 
-        let bookDetailsUrl = urlForBooks + this.props.params.bookid;
-        console.log(bookDetailsUrl);
-
-        fetch(bookDetailsUrl).then(response => {
-            if (!response.ok) {
-                throw Error("Network request failed")
-            }
-            return response
-        }).then(response => response.json())
-            .then(responseJson => {
-                this.setState({
-                    book: responseJson
-                })
-            }, () => {
-                this.setState({
-                    requestFailed: true
-                })
-            })
     }
 
     handleChange(event) {
@@ -59,29 +47,16 @@ export class BookEdit extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state.book);
-
-        let bookDetailsUrl = urlForBooks + this.props.params.bookid;
-
-        return fetch(bookDetailsUrl, {
-            method: 'PUT',
-            mode: 'CORS',
-            body: JSON.stringify(this.state.book),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
-            browserHistory.push({
-                pathname: "/"
-            });
-        }).catch(err => console.log(err.message, err.name));
+        const bookid = this.props.params.bookid;
+        this.props.actions.editBook(bookid, this.state.book);
     }
 
     render() {
+
         return (
             <div className="panel panel-default">
                 <div className="panel-heading">
-                    <h3 className="panel-title">Add Book</h3>
+                    <h3 className="panel-title">Edit Book</h3>
                 </div>
                 <div className="panel-body">
                     <div className="row">
@@ -137,3 +112,15 @@ export class BookEdit extends React.Component {
         );
     }
 }
+
+function mapStateToProps(state, ownProps) {
+    return {
+        book: state.bookReducer
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return { actions: bindActionCreators(bookActions, dispatch) }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BookEdit);

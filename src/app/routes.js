@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import { Route, IndexRoute } from 'react-router'
 
 import { Header } from "./components/Header";
-import { Home } from "./components/Home";
+import Home from "./components/Home";
 import App from "./components/App";
-import { BookDetails } from "./components/BookDetails";
-import { BookAdd } from "./components/BookAdd";
-import { BookEdit } from "./components/BookEdit";
-import { BookDelete } from "./components/BookDelete";
+import BookDetails from "./components/BookDetails";
+import BookAdd from "./components/BookAdd";
+import BookEdit from "./components/BookEdit";
+import BookDelete from "./components/BookDelete";
 
 export default (
 
