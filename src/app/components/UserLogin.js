@@ -3,7 +3,7 @@ import { browserHistory } from "react-router";
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as bookActions from '../actions/bookActions'
+import * as userActions from '../actions/userActions'
 
 class UserLogin extends React.Component {
 
@@ -16,7 +16,6 @@ class UserLogin extends React.Component {
     }
 
     render() {
-        let message = '';
         return (
             <div className="col-sm-6 col-sm-offset-3">
                 <div className="panel panel-default">
@@ -48,14 +47,14 @@ class UserLogin extends React.Component {
     }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
     return {
-        book: state.bookReducer
+        user: state.userReducer
     };
 }
 
 function mapDispatchToProps(dispatch) {
-    return { actions: bindActionCreators(bookActions, dispatch) }
+    return { actions: bindActionCreators(userActions, dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserLogin);

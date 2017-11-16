@@ -3,7 +3,7 @@ import { browserHistory } from "react-router";
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as bookActions from '../actions/bookActions'
+import * as userActions from '../actions/userActions'
 
 class UserRegister extends React.Component {
 
@@ -40,12 +40,12 @@ class UserRegister extends React.Component {
 
 function mapStateToProps(state, ownProps) {
     return {
-        book: state.bookReducer
+        user: state.userReducer
     };
 }
 
 function mapDispatchToProps(dispatch) {
-    return { actions: bindActionCreators(bookActions, dispatch) }
+    return { actions: bindActionCreators(userActions, dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserRegister);
