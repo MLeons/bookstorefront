@@ -8,6 +8,8 @@ import BookDetails from "./components/BookDetails";
 import BookAdd from "./components/BookAdd";
 import BookEdit from "./components/BookEdit";
 import BookDelete from "./components/BookDelete";
+import UserLogin from "./components/UserLogin";
+import UserRegister from "./components/UserRegister";
 
 export default (
 
@@ -17,6 +19,8 @@ export default (
         <Route path={"/details/:bookid"} component={BookDetails} />
         <Route path={"/edit/:bookid"} component={BookEdit} />
         <Route path={"/delete/:bookid"} component={BookDelete} />
+        <Route path={"/login"} component={UserLogin} />
+        <Route path={"/register"} component={UserRegister} />
     </Route>
 
 )

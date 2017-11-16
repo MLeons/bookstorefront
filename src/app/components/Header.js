@@ -17,6 +17,17 @@ export const Header = (props) => {
             <div id="navbar" className="collapse navbar-collapse">
                 <ul className="nav navbar-nav navbar-right">
                     <li>
+                        <Link to={"/login"} activeStyle={{ color: "red" }}>Login</Link>
+                    </li>
+                    <li>
+                        <Link to={"/register"} activeStyle={{ color: "red" }}>Register</Link>
+                    </li>
+                </ul>
+                <ul className="nav navbar-nav navbar-right">
+                    <li className="divider-vertical"></li>
+                </ul>
+                <ul className="nav navbar-nav navbar-right">
+                    <li>
                         <Link to={"/add"} activeStyle={{ color: "red" }}>Add Book</Link>
                     </li>
                 </ul>
