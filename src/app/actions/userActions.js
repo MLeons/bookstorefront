@@ -1,24 +1,42 @@
+import * as flashActions from '../actions/flashActions'
+
+
 const urlUsers = "http://localhost:3000/api/users/";
 
-export function userRegisterSuccess(credentials) {
+export function userRegisterSuccess(userData) {
     return {
         type: "USER_REGISTER",
-        payload: credentials
+        payload: userData
     }
 }
 
 export function userRegister(credentials) {
     return dispatch => {
-        return userRegisterApi().then(credentials => {
-            dispatch(userRegisterSuccess(credentials));
+        return userRegisterApi(credentials).then(userData => {
+            storeUserData(userData.token, userData.user);
+            dispatch(userRegisterSuccess(userData));
+            if (userData.success)
+                dispatch(flashActions.sendFlashMessage(userData.msg, 'alert-success'));
+            else
+                dispatch(flashActions.sendFlashMessage(userData.msg, 'alert-danger'));
+            setTimeout(() => {
+                dispatch(flashActions.clearFlashMessage());
+            }, 3000);
         }).catch(error => {
             throw (error);
         });
     }
 }
-
-export function userRegisterApi(credentials) {
-    return fetch(urlUsers).then(response => {
+export function userRegisterApi(userData) {
+    const urlUsersRegister = urlUsers + 'register';
+    return fetch(urlUsersRegister, {
+        method: 'POST',
+        mode: 'CORS',
+        body: JSON.stringify(userData),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(response => {
         return response.json();
     }).catch(error => {
         return error;
@@ -27,54 +45,76 @@ export function userRegisterApi(credentials) {
 
 // ---
 
-export function userLoginSuccess(credentials) {
+export function userLoginSuccess(userData) {
     return {
         type: "USER_LOGIN",
-        payload: credentials
+        payload: userData
     }
 }
 
 export function userLogin(credentials) {
     return dispatch => {
-        return userLoginApi().then(credentials => {
-            dispatch(userLoginSuccess(credentials));
+        return userLoginApi(credentials).then(userData => {
+            storeUserData(userData.token, userData.user);
+            dispatch(userLoginSuccess(userData));
+            if (userData.success)
+                dispatch(flashActions.sendFlashMessage('You have been successfully logged in', 'alert-success'));
+            else
+                dispatch(flashActions.sendFlashMessage(userData.msg, 'alert-danger'));
+            setTimeout(() => {
+                dispatch(flashActions.clearFlashMessage());
+            }, 3000);
         }).catch(error => {
             throw (error);
         });
     }
 }
 
-export function userLoginApi(credentials) {
-    return fetch(urlUsers).then(response => {
+export function userLoginApi(userData) {
+    const urlUsersLogin = urlUsers + 'authenticate';
+    return fetch(urlUsersLogin, {
+        method: 'POST',
+        mode: 'CORS',
+        body: JSON.stringify(userData),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(response => {
         return response.json();
     }).catch(error => {
         return error;
     });
 }
 
-// ---
+// --- ---
 
-export function userLogoutSuccess(credentials) {
+export function userLogoutSuccess() {
     return {
         type: "USER_LOGOUT",
-        payload: credentials
+        payload: {}
     }
 }
 
-export function userLogout(credentials) {
+export function userLogout() {
     return dispatch => {
-        return userLoginApi().then(credentials => {
-            dispatch(userLoginSuccess(credentials));
-        }).catch(error => {
-            throw (error);
-        });
+        removeUserData();
+        dispatch(userLoginSuccess());
+        dispatch(flashActions.sendFlashMessage('You have been successfully logged out', 'alert-success'));
+        setTimeout(() => {
+            dispatch(flashActions.clearFlashMessage());
+        }, 3000);
+
     }
 }
 
-export function userLogoutApi(credentials) {
-    return fetch(urlUsers).then(response => {
-        return response.json();
-    }).catch(error => {
-        return error;
-    });
+//--- --
+
+export function storeUserData(token, user) {
+    localStorage.setItem('id_token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+}
+
+export function removeUserData() {
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('user');
 }

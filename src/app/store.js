@@ -5,11 +5,13 @@ import thunk from "redux-thunk";
 
 import bookReducer from "./reducers/bookReducer";
 import userReducer from "./reducers/userReducer";
+import flashReducer from "./reducers/flashReducer";
 
 export default createStore(
     combineReducers({
         bookReducer,
-        userReducer
+        userReducer,
+        flashReducer
     }),
     {},
     applyMiddleware(logger(), thunk, promise())

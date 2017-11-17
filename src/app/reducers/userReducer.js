@@ -1,29 +1,38 @@
 import { browserHistory } from "react-router";
 
 const userReducer = (state = {
-    session: ''
+    session: {}
 }, action) => {
 
     switch (action.type) {
 
-        case "USER_LOGIN":
+        case "USER_REGISTER":
+            browserHistory.push({
+                pathname: "/login"
+            });
             state = {
                 ...state,
-                books: action.payload
+                session: action.payload
             };
             break;
 
-        case "USER_REGISTER":
+        case "USER_LOGIN":
+            browserHistory.push({
+                pathname: "/"
+            });
             state = {
                 ...state,
-                books: action.payload
+                session: action.payload
             };
             break;
 
         case "USER_LOGOUT":
+            browserHistory.push({
+                pathname: "/"
+            });
             state = {
                 ...state,
-                books: action.payload
+                session: action.payload
             };
             break;
     }

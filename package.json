@@ -21,7 +21,9 @@
     "react-redux": "*",
     "redux-logger": "*",
     "redux-promise-middleware": "*",
-    "redux-thunk": "*"
+    "redux-thunk": "*",
+    "lodash": "*",
+    "validator": "*"
   },
   "devDependencies": {
     "babel-core": "*",
