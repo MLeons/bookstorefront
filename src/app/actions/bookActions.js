@@ -1,3 +1,5 @@
+import * as flashActions from '../actions/flashActions'
+
 const urlBooks = "http://localhost:3000/api/books/";
 
 export function getBookListSuccess(books) {
@@ -11,6 +13,12 @@ export function getBookList() {
     return dispatch => {
         return getBookListApi().then(books => {
             dispatch(getBookListSuccess(books));
+            if (!Array.isArray(books)) {
+                dispatch(flashActions.sendFlashMessage(books.message, 'alert-danger'));
+                setTimeout(() => {
+                    dispatch(flashActions.clearFlashMessage());
+                }, 3000);
+            }
         }).catch(error => {
             throw (error);
         });
@@ -18,11 +26,19 @@ export function getBookList() {
 }
 
 export function getBookListApi() {
-    return fetch(urlBooks).then(response => {
-        return response.json();
-    }).catch(error => {
-        return error;
-    });
+    return fetch(urlBooks, {
+        headers: {
+            'Authorization': localStorage.getItem('id_token')
+        }
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return new Error(response.status + ' - ' + response.statusText);
+        }
+    }).catch((error) => {
+        throw (error);
+    })
 }
 
 // ---

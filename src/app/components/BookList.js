@@ -20,7 +20,7 @@ class BookList extends React.Component {
 
     render() {
 
-        if (!Array.isArray(this.props.book.books)) return <p>Loading...</p>
+        if (!Array.isArray(this.props.book.books)) return <p>Error!</p>
 
         return (
             <div>
