@@ -22,6 +22,7 @@ class UserLogin extends React.Component {
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleGoogle = this.handleGoogle.bind(this);
     }
 
     isValid() {
@@ -32,6 +33,10 @@ class UserLogin extends React.Component {
         return isValid;
     }
 
+    handleGoogle(e) {
+        e.preventDefault();
+        this.props.actions.userLoginGoogle();
+    }
 
     handleChange(event) {
         const target = event.target;
@@ -74,6 +79,8 @@ class UserLogin extends React.Component {
                                     </div>
                                     <br />
                                     <button type="submit" className="btn btn-default">Login</button>
+                                    &nbsp;
+                                    <button onClick={this.handleGoogle} className="btn btn-default fa-google-plus">Google</button>
                                 </form>
                             </div>
                         </div>

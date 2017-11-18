@@ -109,6 +109,41 @@ export function userLogout() {
 
 //--- --
 
+export function userLoginGoogleSuccess(userData) {
+    return {
+        type: "USER_LOGIN_GOOGLE",
+        payload: userData
+    }
+}
+
+export function userLoginGoogle() {
+    return dispatch => {
+        return userLoginGoogleApi().then(userData => {
+            dispatch(userLoginGoogleSuccess(userData));
+
+        }).catch(error => {
+            throw (error);
+        });
+    }
+}
+
+export function userLoginGoogleApi() {
+    const urlUsersLoginGoogle = "http://localhost:3000/api/auth/google";
+    return fetch(urlUsersLoginGoogle, {
+        mode: 'no-cors'
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return new Error(response.status + ' - ' + response.statusText);
+        }
+    }).catch((error) => {
+        throw (error);
+    })
+}
+
+//--- --
+
 export function storeUserData(token, user) {
     localStorage.setItem('id_token', token);
     localStorage.setItem('user', JSON.stringify(user));

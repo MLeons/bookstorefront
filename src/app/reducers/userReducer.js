@@ -35,6 +35,17 @@ const userReducer = (state = {
                 session: action.payload
             };
             break;
+
+        case "USER_LOGIN_GOOGLE":
+            browserHistory.push({
+                pathname: "/"
+            });
+            state = {
+                ...state,
+                session: action.payload
+            };
+            break;
+
     }
     return state;
 };
