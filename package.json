@@ -23,7 +23,15 @@
     "redux-promise-middleware": "*",
     "redux-thunk": "*",
     "lodash": "*",
-    "validator": "*"
+    "validator": "*",
+    "passport": ">= 0.0.0",
+    "passport-jwt": "*",
+    "passport-google-oauth2": ">= 0.0.0",
+    "mongoose": "*",
+    "bcrypt": "*",
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "express-session": "*"
   },
   "devDependencies": {
     "babel-core": "*",

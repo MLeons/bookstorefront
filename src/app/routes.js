@@ -11,6 +11,7 @@ import BookDelete from "./components/BookDelete";
 import UserLogin from "./components/UserLogin";
 import UserRegister from "./components/UserRegister";
 import UserLogout from "./components/UserLogout";
+import AuthGoogle from "./components/AuthGoogle";
 
 export default (
 
@@ -23,6 +24,7 @@ export default (
         <Route path={"/login"} component={UserLogin} />
         <Route path={"/register"} component={UserRegister} />
         <Route path={"/logout"} component={UserLogout} />
+        <Route path={"/authgoog"} component={AuthGoogle} />
     </Route>
 
 )

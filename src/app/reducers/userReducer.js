@@ -40,6 +40,14 @@ const userReducer = (state = {
             browserHistory.push({
                 pathname: "/"
             });
+            window.location.reload();
+            state = {
+                ...state,
+                session: action.payload
+            };
+            break;
+
+        case "GET_AUTH_USER":
             state = {
                 ...state,
                 session: action.payload

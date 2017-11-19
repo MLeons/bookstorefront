@@ -120,27 +120,38 @@ export function userLoginGoogle() {
     return dispatch => {
         return userLoginGoogleApi().then(userData => {
             dispatch(userLoginGoogleSuccess(userData));
-
-        }).catch(error => {
-            throw (error);
-        });
+        })
     }
 }
 
 export function userLoginGoogleApi() {
-    const urlUsersLoginGoogle = "http://localhost:3000/api/auth/google";
-    return fetch(urlUsersLoginGoogle, {
-        mode: 'no-cors'
-    }).then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            return new Error(response.status + ' - ' + response.statusText);
-        }
-    }).catch((error) => {
-        throw (error);
+    const urlUsersLoginGoogle = urlUsers + 'authgoogle';
+
+    return $.getJSON("api/user_data").success(data => {
+
+        return fetch(urlUsersLoginGoogle, {
+            method: 'POST',
+            mode: 'CORS',
+            body: JSON.stringify(data.username),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return new Error(response.status + ' - ' + response.statusText);
+            }
+        }).then(userData => {
+            storeUserData(userData.token, userData.user);
+            return userData;
+        }).catch(error => {
+            return error;
+        });
     })
 }
+
+
 
 //--- --
 
@@ -162,3 +173,35 @@ export function removeUserData() {
 //     }
 // }
 
+
+//--- --
+
+
+export function getAuthUserSuccess(userData) {
+    return {
+        type: "GET_AUTH_USER",
+        payload: userData
+    }
+}
+
+export function getAuthUser() {
+    return dispatch => {
+        return getAuthUserApi().then(userData => {
+            dispatch(getAuthUserSuccess(userData));
+        }).catch(error => {
+            throw (error);
+        });
+    }
+}
+
+export function getAuthUserApi(userData) {
+
+    return fetch('api/user_data').then(response => {
+        return response.json();
+    }).catch(error => {
+        return error;
+    });
+}
+
+
+// ---

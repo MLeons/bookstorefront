@@ -3,7 +3,9 @@ import { Link, browserHistory } from "react-router";
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as bookActions from '../actions/bookActions'
+import * as bookActions from '../actions/bookActions';
+import * as userActions from '../actions/userActions';
+
 
 
 class BookList extends React.Component {
@@ -14,7 +16,7 @@ class BookList extends React.Component {
         });
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.actions.getBookList();
     }
 
@@ -49,12 +51,13 @@ class BookList extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        book: state.bookReducer
+        book: state.bookReducer,
+        user: state.userReducer
     };
 }
 
 function mapDispatchToProps(dispatch) {
-    return { actions: bindActionCreators(bookActions, dispatch) }
+    return { actions: bindActionCreators({ ...userActions, ...bookActions }, dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BookList);
